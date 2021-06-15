@@ -79,4 +79,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_roundImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:civ_border_width="3dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_photo_register"
+        app:layout_constraintEnd_toEndOf="@+id/btn_photo_register"
+        app:layout_constraintStart_toStartOf="@+id/btn_photo_register"
+        app:layout_constraintTop_toTopOf="@+id/btn_photo_register"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

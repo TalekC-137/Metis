@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -14,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.scollon.chattingapp.models.User
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
@@ -87,8 +89,9 @@ class RegisterActivity : AppCompatActivity() {
             //getBitmap is deprecated but still works so no need to change it (for now)
             val bitMap = MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
 
+            iv_roundImage.setImageBitmap(bitMap)
+            btn_photo_register.visibility = View.INVISIBLE
             val bitMapDrawable = BitmapDrawable(bitMap)
-
             btn_photo_register.background = bitMapDrawable
             btn_photo_register.text = ""
 
@@ -96,19 +99,21 @@ class RegisterActivity : AppCompatActivity() {
         }
 
     }
-/*
+
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null)
         val currentUser = auth.currentUser
         if(currentUser != null){
-
-            Toast.makeText(this,"już zalogowany", Toast.LENGTH_SHORT).show()
+            val i = Intent(this, MessagesActivity::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(i)
+            Log.d("FireB_registration", "user was logged in and automatically moved to the messages activity")
         }
     }
 
 
- */
+
     private fun uploadImageToFirebase(){
         if(photoUri == null) return
         val filename = UUID.randomUUID().toString()
@@ -127,15 +132,19 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun saveUserToFirebaseDatabase(ImageUrl: String){
-        Log.d("FireB_registration", "jeden")
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         val username = et_name_register.text.toString()
 
        val user = User(uid, username, ImageUrl)
-        Log.d("FireB_registration", "dwa")
         ref.setValue(user).addOnSuccessListener {
+
+            val i = Intent(this, MessagesActivity::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(i)
+
             Log.d("FireB_registration", "user has been saved into the firebase")
+
         }.addOnFailureListener{
 
                 Log.d("FireB_registration", "user has NOT been saved into the firebase")
@@ -146,4 +155,3 @@ class RegisterActivity : AppCompatActivity() {
 
 }
 
-class User(val uid: String, val username: String, val profileImageUrl: String)

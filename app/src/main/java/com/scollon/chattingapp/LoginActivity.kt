@@ -1,5 +1,6 @@
 package com.scollon.chattingapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -31,6 +32,9 @@ class LoginActivity : AppCompatActivity() {
                         Log.d("FireB_login", "signInWithEmail:success")
                         val user = auth.currentUser
                         Toast.makeText(this, "success", Toast.LENGTH_SHORT).show()
+                        val i = Intent(this, MessagesActivity::class.java)
+                        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(i)
 
                     } else {
                         // If sign in fails, display a message to the user.
