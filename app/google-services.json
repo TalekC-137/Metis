@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "973323485719",
+    "firebase_url": "https://chatter-780b0-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "chatter-780b0",
+    "storage_bucket": "chatter-780b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973323485719:android:8a2705fc5994525c3bd252",
+        "android_client_info": {
+          "package_name": "com.scollon.chattingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "973323485719-5r4429p3o410maic12ukq5la7feejn42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzP4hNchqp81UZd6OmJpxmEgi9Ebu5DFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "973323485719-5r4429p3o410maic12ukq5la7feejn42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
