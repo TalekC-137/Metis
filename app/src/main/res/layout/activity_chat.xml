@@ -34,6 +34,8 @@
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:reverseLayout="false"
+        app:stackFromEnd="true"
         android:background="@android:color/holo_blue_bright"
         app:layout_constraintBottom_toTopOf="@+id/et_chatMessage"
         app:layout_constraintEnd_toEndOf="parent"

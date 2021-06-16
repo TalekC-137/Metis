@@ -3,6 +3,13 @@ package com.scollon.chattingapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.scollon.chattingapp.models.ChatMessage
 import com.scollon.chattingapp.models.User
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieAdapter
@@ -10,23 +17,93 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.chat_left_sender_row.view.*
+import kotlinx.android.synthetic.main.chat_right_sender_row.view.*
 
 class ChatActivity : AppCompatActivity() {
+
+    val adapter = GroupieAdapter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+
+
+
+        rv_chat.adapter = adapter
 
          val user = intent.getParcelableExtra<User>("user")
         val userName = user?.username
          supportActionBar?.title = userName
 
+        if(user != null){
+            listenForMessages(user)
+        }
+
+/*
         val adapter = GroupieAdapter()
-        adapter.add(ChatLeftItem(user))
-        adapter.add(ChatRightItem())
-        adapter.add(ChatLeftItem(user))
-        adapter.add(ChatRightItem())
-        rv_chat.adapter = adapter
+        adapter.add(ChatLeftItem(user, "od lewejj"))
+        adapter.add(ChatRightItem("od prwejjj"))
+        adapter.add(ChatLeftItem(user, "od lewejj"))
+        adapter.add(ChatRightItem("od praweeej"))
+        rv_chat.adapter = adapter */
+
+
+        btn_sendMessage.setOnClickListener(){
+
+            sendMessage()
+
+        }
+
+
     }
+
+    private fun listenForMessages(user: User){
+        val fromId = FirebaseAuth.getInstance().uid // current users id aka right chat
+        val toId = user.uid //aka left uid
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
+
+
+        ref.addChildEventListener(object: ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val chatMessage = snapshot.getValue(ChatMessage::class.java)
+                if(chatMessage != null){
+                    if(chatMessage.fromId == FirebaseAuth.getInstance().uid){
+                        val currentUser = MessagesActivity.currentUser
+                        if(currentUser != null) {
+                            adapter.add(ChatRightItem(currentUser, chatMessage.text))
+                        }
+                    }else{
+                        adapter.add(ChatLeftItem(user, chatMessage.text))
+                    }
+
+                
+
+                }
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+
+        })
+
+    }
+
+
+
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -34,23 +111,61 @@ class ChatActivity : AppCompatActivity() {
         startActivity(i)
     }
 
-}
 
-class ChatLeftItem(val user: User?): Item<GroupieViewHolder>(){
+
+    private fun sendMessage(){
+        val user = intent.getParcelableExtra<User>("user")
+        val fromId = FirebaseAuth.getInstance().uid
+        val toId = user?.uid
+      //  val ref = FirebaseDatabase.getInstance().getReference("/messages").push()
+        val text = et_chatMessage.text.toString()
+
+        if(toId == null) return
+        if(fromId == null) return
+
+
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()  //chat in user a node
+        val reverseRef = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push() // chat in user b node
+
+        val message = ChatMessage(ref.key!!, text, fromId, toId, System.currentTimeMillis())
+
+        ref.setValue(message).addOnSuccessListener {
+            Log.d("messageSending", "message was saved: ${ref.key}")
+            rv_chat.scrollToPosition(adapter.itemCount -1)
+        }
+        reverseRef.setValue(message).addOnSuccessListener {
+            Log.d("messageSending", "message was saved: ${reverseRef.key}")
+        }
+        et_chatMessage.text.clear()
+
+        val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
+        val latestMessageReverseRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
+        latestMessageRef.setValue(message)
+        latestMessageReverseRef.setValue(message)
+
+    }
+}
+//left side of the chat aka the messages that you receive
+class ChatLeftItem(val user: User, val text: String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+
+        viewHolder.itemView.tv_chat_left.text = text
 
         val uri = user?.profileImageUrl
         Picasso.get().load(uri).into(viewHolder.itemView.iv_leftProf)
-
     }
-
     override fun getLayout(): Int {
         return R.layout.chat_left_sender_row
     }
-
 }
-class ChatRightItem: Item<GroupieViewHolder>(){
+// right side of the chat aka the messages that you have sent
+class ChatRightItem(val user: User, val text: String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+
+        viewHolder.itemView.tv_chat_right.text = text
+
+        val uri = user?.profileImageUrl
+        Picasso.get().load(uri).into(viewHolder.itemView.iv_RightProf)
 
     }
 

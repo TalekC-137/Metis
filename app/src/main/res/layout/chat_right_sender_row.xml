@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_RightProf"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -16,7 +16,7 @@
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_chat_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
