@@ -26,9 +26,7 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-
-
-
+        
         rv_chat.adapter = adapter
 
          val user = intent.getParcelableExtra<User>("user")
@@ -119,7 +117,7 @@ class ChatActivity : AppCompatActivity() {
         val toId = user?.uid
       //  val ref = FirebaseDatabase.getInstance().getReference("/messages").push()
         val text = et_chatMessage.text.toString()
-
+        if(text.isEmpty()) return
         if(toId == null) return
         if(fromId == null) return
 

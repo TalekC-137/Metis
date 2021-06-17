@@ -1,15 +1,17 @@
 package com.scollon.chattingapp
 
 import android.content.Intent
-import android.media.VolumeAutomation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.scollon.chattingapp.models.ChatMessage
 import com.scollon.chattingapp.models.User
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -33,11 +35,22 @@ class MessagesActivity : AppCompatActivity() {
 
         listenForLatestMessages()
 
+        val a = mutableListOf<User>()
+
+
+
         rv_latest_messages.adapter = adapter
+        rv_latest_messages.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
+        adapter.setOnItemClickListener { item, view ->
+
+            val i = Intent(this, ChatActivity::class.java)
+            val userRow = item as LatestMessageRow
+            i.putExtra("user", userRow.chatUser)
+            startActivity(i)
+
+        }
     }
-
-
-
     val latestMessagesMap = HashMap<String, ChatMessage>()
 
 
@@ -45,9 +58,16 @@ class MessagesActivity : AppCompatActivity() {
         adapter.clear()
         latestMessagesMap.values.forEach {
             adapter.add(LatestMessageRow(it))
+
+
         }
 
     }
+
+
+
+
+
 
 
     private fun listenForLatestMessages(){
@@ -57,9 +77,10 @@ class MessagesActivity : AppCompatActivity() {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
 
                 val chatMessage = snapshot.getValue(ChatMessage::class.java) ?: return
-
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
+
+
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -68,6 +89,7 @@ class MessagesActivity : AppCompatActivity() {
 
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
+             //   changeOrder()
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -130,10 +152,34 @@ class MessagesActivity : AppCompatActivity() {
 
 
 class LatestMessageRow(val chatMessage: ChatMessage): Item<GroupieViewHolder>(){
+   var chatUser: User? = null
+
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
-        viewHolder.itemView.tv_text_content.text = chatMessage.text
+        val whoAreWeTexting: String
+        //if we are the ones who sent the last message the other user will be the toId guy
+        if(chatMessage.fromId == FirebaseAuth.getInstance().uid){
+            whoAreWeTexting = chatMessage.toId
+        }else{
+            whoAreWeTexting = chatMessage.fromId
+        }
 
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$whoAreWeTexting")
+
+        ref.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                 chatUser = snapshot.getValue(User::class.java) ?: return
+                viewHolder.itemView.tv_latest_username.text = chatUser?.username
+               Picasso.get().load(chatUser?.profileImageUrl).into(viewHolder.itemView.iv_latestMess_profPic)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        } )
+
+        viewHolder.itemView.tv_text_content.text = chatMessage.text
 
     }
 
