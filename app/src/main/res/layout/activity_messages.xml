@@ -10,9 +10,118 @@
         android:id="@+id/rv_latest_messages"
         android:layout_width="409dp"
         android:layout_height="729dp"
+        android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <RelativeLayout
+        android:id="@+id/unverifiedLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#272323"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <TextView
+            android:id="@+id/mail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#DDD"
+            android:textSize="22sp"
+            android:layout_marginBottom="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/mailverified"/>
+
+        <TextView
+            android:id="@+id/mailverified"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pls verify your email to continue"
+            android:textColor="#DDD"
+            android:textSize="22sp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+
+        <TextView
+            android:id="@+id/verif2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="your email is not yet verified"
+            android:textColor="#DDD"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/mailverified"
+            android:layout_marginTop="16dp"
+            />
+        <TextView
+            android:id="@+id/trz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pls check your inbox "
+            android:textColor="#DDD"
+            android:textSize="16sp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/verif2"
+            android:layout_marginTop="2dp"
+            />
+        <TextView
+        android:id="@+id/sure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="make sure the email you provided is correct"
+        android:textColor="#DDD"
+        android:textSize="16sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/trz"
+        android:layout_marginTop="2dp"
+        />
+
+
+        <View
+            android:id="@+id/centerer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"
+            />
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sure"
+            android:layout_centerHorizontal="true">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_tryAgain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="register again"
+                android:layout_marginTop="4dp"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@id/btn_tryAgain"
+                android:text="refresh" />
+
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

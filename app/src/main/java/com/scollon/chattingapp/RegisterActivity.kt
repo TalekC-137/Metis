@@ -47,6 +47,9 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "enter ALL of the information", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            loadingLayout.visibility = View.VISIBLE
+            tv_registerProgress.text = "creating user"
             auth.createUserWithEmailAndPassword(emailRegister, passwordRegister)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -76,8 +79,6 @@ class RegisterActivity : AppCompatActivity() {
         }
 
 
-
-
     }
     var photoUri: Uri? = null
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -100,22 +101,11 @@ class RegisterActivity : AppCompatActivity() {
 
     }
 
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null)
-        val currentUser = auth.currentUser
-        if(currentUser != null){
-            val i = Intent(this, MessagesActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(i)
-            Log.d("FireB_registration", "user was logged in and automatically moved to the messages activity")
-        }
-    }
-
 
 
     private fun uploadImageToFirebase(){
         if(photoUri == null) return
+        tv_registerProgress.text = "uploading image"
         val filename = UUID.randomUUID().toString()
         val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
 
@@ -136,12 +126,11 @@ class RegisterActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         val username = et_name_register.text.toString()
 
+        tv_registerProgress.text = "saving user"
        val user = User(uid, username, ImageUrl)
         ref.setValue(user).addOnSuccessListener {
+            sendVerificationEmail()
 
-            val i = Intent(this, MessagesActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(i)
 
             Log.d("FireB_registration", "user has been saved into the firebase")
 
@@ -152,6 +141,21 @@ class RegisterActivity : AppCompatActivity() {
             }
 
     }
+    private fun sendVerificationEmail(){
 
+        val user = Firebase.auth.currentUser
+        tv_registerProgress.text = "sending verification email"
+        user!!.sendEmailVerification()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    loadingLayout.visibility = View.GONE
+                    Log.d("FireB_registration", "Email sent.")
+                    val i = Intent(this, MessagesActivity::class.java)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(i)
+                }
+            }
+
+    }
 }
 

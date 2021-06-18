@@ -9,15 +9,13 @@
         android:id="@+id/iv_latestMess_profPic"
         android:layout_width="66dp"
         android:layout_height="66dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:civ_border_width="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_notification_overlay" />
-
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/tv_latest_username"
         android:layout_width="wrap_content"
