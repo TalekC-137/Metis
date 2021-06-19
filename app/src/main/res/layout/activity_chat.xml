@@ -21,14 +21,17 @@
         app:layout_constraintEnd_toStartOf="@+id/btn_sendMessage"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <ImageView
         android:id="@+id/btn_sendMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="2dp"
+        android:layout_width="56dp"
+        android:layout_height="0dp"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+
+
+        app:layout_constraintTop_toBottomOf="@+id/rv_chat"
+        app:srcCompat="@drawable/ic_baseline_send_24" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_chat"

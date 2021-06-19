@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
@@ -43,6 +44,24 @@ class MessagesActivity : AppCompatActivity() {
         bottomNavigationView.background = null
         bottomNavigationView.menu.getItem(1).isEnabled = false
 
+
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            menuItem ->
+            when (menuItem.itemId) {
+
+                R.id.menu_bottom_Profile -> {
+                   rv_latest_messages.visibility = View.GONE
+                }
+                R.id.menu_bottom_home -> {
+                    rv_latest_messages.visibility = View.VISIBLE
+                }
+
+            }
+
+            true
+        }
+
+
         auth = Firebase.auth //I know I have two of these
 
         getCurrentUser()
@@ -78,10 +97,13 @@ class MessagesActivity : AppCompatActivity() {
             val i = Intent(this, NewMessageActivity::class.java)
             startActivity(i)
         }
+
     }
 
 
-    public override fun onStart() {
+
+
+        public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null)
         val currentUser = auth.currentUser
@@ -194,9 +216,14 @@ class MessagesActivity : AppCompatActivity() {
                     Toast.makeText(this, "verify your email", Toast.LENGTH_SHORT).show()
                 }
             }
+
         }
         return super.onOptionsItemSelected(item)
     }
+
+
+
+
 
 
     private fun getCurrentUser(){

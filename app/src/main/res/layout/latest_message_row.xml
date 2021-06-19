@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="128dp">
+    android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_latestMess_profPic"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -16,31 +16,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tv_latest_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        tools:text="Username"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tv_text_content"
         app:layout_constraintStart_toEndOf="@+id/iv_latestMess_profPic"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="@+id/iv_latestMess_profPic"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Username" />
 
     <TextView
         android:id="@+id/tv_text_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        tools:text="lorem ipsum lorem ipsum"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/tv_latest_username"
-        app:layout_constraintTop_toBottomOf="@+id/tv_latest_username" />
+        app:layout_constraintStart_toEndOf="@+id/iv_latestMess_profPic"
+        app:layout_constraintTop_toBottomOf="@+id/tv_latest_username"
+        tools:text="lorem ipsum lorem ipsum" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
