@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
@@ -30,6 +31,8 @@ class MessagesActivity : AppCompatActivity() {
         var currentUser: User? = null
     }
 
+    var mailVerif: Boolean = false
+
     val adapter = GroupieAdapter()
 
 
@@ -37,21 +40,12 @@ class MessagesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages)
 
+        bottomNavigationView.background = null
+        bottomNavigationView.menu.getItem(1).isEnabled = false
+
         auth = Firebase.auth //I know I have two of these
 
-
-
-
         getCurrentUser()
-/*
-        val user = FirebaseAuth.getInstance().currentUser
-
-        if (user!!.isEmailVerified) {
-            Log.d(TAG, "Email is verified.")
-        } else {
-            Log.d(TAG, "Email is not verified !.")
-        }
-*/
 
         listenForLatestMessages()
 
@@ -80,8 +74,26 @@ class MessagesActivity : AppCompatActivity() {
             startActivity(getIntent())
             overridePendingTransition(R.anim.abc_fade_in,R.anim.abc_fade_out);
         }
+        fab.setOnClickListener{
+            val i = Intent(this, NewMessageActivity::class.java)
+            startActivity(i)
+        }
     }
 
+
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null)
+        val currentUser = auth.currentUser
+        if(currentUser == null){
+            val i = Intent(this, RegisterActivity::class.java)
+            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(i)
+            Log.d("FireB_registration", "new user, was not logged in")
+        }else{
+            confirmVerification()
+        }
+    }
 
    private fun confirmVerification(){
 
@@ -89,25 +101,29 @@ class MessagesActivity : AppCompatActivity() {
        user?.reload()
 
        if (user!!.isEmailVerified) {
+           mailVerif = true
+           fab.visibility = View.VISIBLE
            unverifiedLayout.visibility = View.GONE
            Log.d("verification", "Email is verified.")
        } else {
+           mailVerif = false
+           fab.visibility = View.GONE
            unverifiedLayout.visibility = View.VISIBLE
            mail.text = user.email
            Log.d("verification", "Email is not verified !.")
-
        }
    }
-
-
     val latestMessagesMap = HashMap<String, ChatMessage>()
 
     private fun refreshRecyclerView(){
         adapter.clear()
-
+        var i = 0
         latestMessagesMap.values.forEach {
             adapter.add(LatestMessageRow(it))
-
+            i++
+            if(latestMessagesMap.size == i){
+                pB_mess.visibility = View.GONE
+            }
         }
 
     }
@@ -118,7 +134,7 @@ class MessagesActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$currentUserId")
         ref.addChildEventListener(object: ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-
+                pB_mess.visibility = View.VISIBLE
 
                 val chatMessage = snapshot.getValue(ChatMessage::class.java) ?: return
 
@@ -128,7 +144,7 @@ class MessagesActivity : AppCompatActivity() {
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-
+                pB_mess.visibility = View.VISIBLE
                 val chatMessage = snapshot.getValue(ChatMessage::class.java) ?: return
 
                 latestMessagesMap[snapshot.key!!] = chatMessage
@@ -166,17 +182,18 @@ class MessagesActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
        when(item?.itemId){
             R.id.menu_sigh_out -> {
-                FirebaseAuth.getInstance().signOut()
-            val i = Intent(this, RegisterActivity::class.java)
-                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(i)
+                if(mailVerif) {
+                    FirebaseAuth.getInstance().signOut()
+                    val i = Intent(this, RegisterActivity::class.java)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(i)
+                }else{
+                    Toast.makeText(this, "verify your email", Toast.LENGTH_SHORT).show()
+                }
             }
-           R.id.menu_new_message -> {
-               val i = Intent(this, NewMessageActivity::class.java)
-               startActivity(i)
-           }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -199,19 +216,7 @@ class MessagesActivity : AppCompatActivity() {
         })
 
     }
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null)
-        val currentUser = auth.currentUser
-        if(currentUser == null){
-            val i = Intent(this, RegisterActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(i)
-            Log.d("FireB_registration", "new user, was not logged in")
-        }else{
-            confirmVerification()
-        }
-    }
+
 }
 
 class LatestMessageRow(val chatMessage: ChatMessage): Item<GroupieViewHolder>(){
@@ -235,6 +240,14 @@ class LatestMessageRow(val chatMessage: ChatMessage): Item<GroupieViewHolder>(){
                  chatUser = snapshot.getValue(User::class.java) ?: return
                 viewHolder.itemView.tv_latest_username.text = chatUser?.username
                Picasso.get().load(chatUser?.profileImageUrl).into(viewHolder.itemView.iv_latestMess_profPic)
+
+
+                if(chatMessage.fromId == FirebaseAuth.getInstance().uid){
+                    viewHolder.itemView.tv_text_content.text = "you: " + chatMessage.text
+                }else{
+                    viewHolder.itemView.tv_text_content.text = chatMessage.text
+                }
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -243,7 +256,7 @@ class LatestMessageRow(val chatMessage: ChatMessage): Item<GroupieViewHolder>(){
 
         } )
 
-        viewHolder.itemView.tv_text_content.text = chatMessage.text
+
 
     }
 

@@ -5,10 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.scollon.chattingapp.models.ChatMessage
 import com.scollon.chattingapp.models.User
 import com.squareup.picasso.Picasso
@@ -141,8 +138,9 @@ class ChatActivity : AppCompatActivity() {
         latestMessageRef.setValue(message)
         latestMessageReverseRef.setValue(message)
 
+           }
     }
-}
+
 //left side of the chat aka the messages that you receive
 class ChatLeftItem(val user: User, val text: String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {

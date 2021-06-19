@@ -2,10 +2,7 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/menu_new_message"
-        android:title="New Message"
-        app:showAsAction="ifRoom"/>
+
     <item
         android:id="@+id/menu_sigh_out"
         android:title="Sign Out"
