@@ -11,11 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="50dp"
+        android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="50dp"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/pB_mess"
@@ -60,97 +61,111 @@
         app:layout_anchor="@id/bottomAppBar" />
 
 
-
     <RelativeLayout
         android:id="@+id/unverifiedLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#272323"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/mail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/mailverified"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="48dp"
             android:text=""
             android:textColor="#DDD"
-            android:textSize="22sp"
-            android:layout_marginBottom="48dp"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@id/mailverified"/>
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/mailverified"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="pls verify your email to continue"
             android:textColor="#DDD"
-            android:textSize="22sp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
+            android:textSize="22sp" />
 
 
         <TextView
             android:id="@+id/verif2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/mailverified"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
             android:text="your email is not yet verified"
             android:textColor="#DDD"
-            android:textSize="16sp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/mailverified"
-            android:layout_marginTop="16dp"
-            />
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/trz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/verif2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
             android:text="pls check your inbox "
             android:textColor="#DDD"
-            android:textSize="16sp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/verif2"
-            android:layout_marginTop="2dp"
-            />
-        <TextView
-        android:id="@+id/sure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="make sure the email you provided is correct"
-        android:textColor="#DDD"
-        android:textSize="16sp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/trz"
-        android:layout_marginTop="2dp"
-        />
+            android:textSize="16sp" />
 
+        <TextView
+            android:id="@+id/sure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/trz"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:text="make sure the email you provided is correct"
+            android:textColor="#DDD"
+            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/spam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sure"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:text="if you don't see the mail pls check your spam folder"
+            android:textColor="#DDD"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/ref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spam"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:text="after verifying you might need to click the refresh button below"
+            android:textColor="#DDD"
+            android:textSize="10sp" />
 
         <View
             android:id="@+id/centerer"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_centerHorizontal="true"
-            />
+            android:layout_centerHorizontal="true" />
 
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sure"
+            android:layout_below="@id/ref"
             android:layout_centerHorizontal="true">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_tryAgain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="register again"
                 android:layout_marginTop="4dp"
-                />
+                android:text="register again" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_refresh"
@@ -164,8 +179,49 @@
         </RelativeLayout>
 
 
-
     </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_profile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:layout_marginBottom="50dp">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iV_profile_prof"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="32dp"
+            app:civ_border_width="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/btn_star_big_on" />
+
+        <TextView
+            android:id="@+id/tv_profile_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="username"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iV_profile_prof" />
+
+        <TextView
+            android:id="@+id/tv_profile_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_profile_username" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

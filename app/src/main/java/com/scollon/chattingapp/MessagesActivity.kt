@@ -51,9 +51,11 @@ class MessagesActivity : AppCompatActivity() {
 
                 R.id.menu_bottom_Profile -> {
                    rv_latest_messages.visibility = View.GONE
+                    layout_profile.visibility = View.VISIBLE
                 }
                 R.id.menu_bottom_home -> {
                     rv_latest_messages.visibility = View.VISIBLE
+                    layout_profile.visibility = View.GONE
                 }
 
             }
@@ -65,8 +67,7 @@ class MessagesActivity : AppCompatActivity() {
         auth = Firebase.auth //I know I have two of these
 
         getCurrentUser()
-
-        listenForLatestMessages()
+        listenForLatestMessages()    //the main "home" layout with the lates messages sent recyclerView
 
 
         rv_latest_messages.adapter = adapter
@@ -135,6 +136,13 @@ class MessagesActivity : AppCompatActivity() {
            Log.d("verification", "Email is not verified !.")
        }
    }
+
+
+
+
+
+
+
     val latestMessagesMap = HashMap<String, ChatMessage>()
 
     private fun refreshRecyclerView(){
@@ -207,14 +215,12 @@ class MessagesActivity : AppCompatActivity() {
 
        when(item?.itemId){
             R.id.menu_sigh_out -> {
-                if(mailVerif) {
+
                     FirebaseAuth.getInstance().signOut()
                     val i = Intent(this, RegisterActivity::class.java)
                     i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(i)
-                }else{
-                    Toast.makeText(this, "verify your email", Toast.LENGTH_SHORT).show()
-                }
+
             }
 
         }
@@ -234,6 +240,13 @@ class MessagesActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
 
                 currentUser = snapshot.getValue(User::class.java)
+
+                tv_profile_username.text = currentUser?.username
+
+                tv_profile_email.text = auth.currentUser?.email
+
+                Picasso.get().load(currentUser?.profileImageUrl).into(iV_profile_prof)
+                
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -243,6 +256,11 @@ class MessagesActivity : AppCompatActivity() {
         })
 
     }
+
+
+
+
+
 
 }
 
