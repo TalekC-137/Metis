@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.size
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -67,8 +68,8 @@ class MessagesActivity : AppCompatActivity() {
         auth = Firebase.auth //I know I have two of these
 
         getCurrentUser()
-        listenForLatestMessages()    //the main "home" layout with the lates messages sent recyclerView
-
+        listenForLatestMessages()
+        //the main "home" layout with the lates messages sent recyclerView
 
         rv_latest_messages.adapter = adapter
 
@@ -134,8 +135,17 @@ class MessagesActivity : AppCompatActivity() {
            unverifiedLayout.visibility = View.VISIBLE
            mail.text = user.email
            Log.d("verification", "Email is not verified !.")
+
+
+
+
+
        }
+
+
    }
+
+
 
 
 
@@ -154,6 +164,7 @@ class MessagesActivity : AppCompatActivity() {
             if(latestMessagesMap.size == i){
                 pB_mess.visibility = View.GONE
             }
+
         }
 
     }
@@ -170,6 +181,8 @@ class MessagesActivity : AppCompatActivity() {
 
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
+
+
 
             }
 

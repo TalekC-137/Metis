@@ -3,6 +3,8 @@ package com.scollon.chattingapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -16,16 +18,47 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.user_row.view.*
+import org.w3c.dom.Text
 
 
 class NewMessageActivity : AppCompatActivity() {
+
+    var str:String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
 
         fetchUsers()
 
+
+     et_search.addTextChangedListener(object: TextWatcher {
+
+         override fun afterTextChanged(s: Editable?) {
+
+         }
+
+         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+         }
+
+         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+             if(et_search.text.isEmpty()){
+                 fetchUsers()
+             }else{
+                 str = s.toString();
+                 fetchUsers()
+
+             }
+
+         }
+     })
+
+
     }
+
+
     private fun fetchUsers(){
       val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object: ValueEventListener{
@@ -40,10 +73,22 @@ class NewMessageActivity : AppCompatActivity() {
                 snapshot.children.forEach {
 
                     val user = it.getValue(User::class.java)
+                    var name: String = user?.username ?: ""
+                    if(str == "" || str == null){
 
-                    if (user != null) {
+                        if (user != null) {
                         adapter.add(UserItem(user))
+                             }
+
+                        // takes the text from the search bar and compares it to the firebase users
+                        // if their name contains (not only starts but contains in general) it shows them
+                        // if the search bar is empty it shows all of them
+                    }else if(name.contains(str, ignoreCase = true)){
+                        if (user != null) {
+                            adapter.add(UserItem(user))
+                        }
                     }
+
                 }
 
                     adapter.setOnItemClickListener { item, view ->
