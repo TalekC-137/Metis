@@ -48,7 +48,13 @@ class ChatActivity : AppCompatActivity() {
             sendMessage()
 
         }
+        btn_usersProfile.setOnClickListener{
 
+            var i = Intent(this, OtherUserProfileActivity::class.java)
+            i.putExtra("userProf", user)
+            startActivity(i)
+
+        }
 
     }
 

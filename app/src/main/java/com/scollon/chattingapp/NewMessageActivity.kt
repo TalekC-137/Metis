@@ -33,15 +33,10 @@ class NewMessageActivity : AppCompatActivity() {
 
 
      et_search.addTextChangedListener(object: TextWatcher {
-
          override fun afterTextChanged(s: Editable?) {
-
          }
-
          override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
          }
-
          override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
              if(et_search.text.isEmpty()){
@@ -49,16 +44,10 @@ class NewMessageActivity : AppCompatActivity() {
              }else{
                  str = s.toString();
                  fetchUsers()
-
              }
-
          }
      })
-
-
     }
-
-
     private fun fetchUsers(){
       val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object: ValueEventListener{
@@ -79,7 +68,6 @@ class NewMessageActivity : AppCompatActivity() {
                         if (user != null) {
                         adapter.add(UserItem(user))
                              }
-
                         // takes the text from the search bar and compares it to the firebase users
                         // if their name contains (not only starts but contains in general) it shows them
                         // if the search bar is empty it shows all of them
@@ -88,7 +76,6 @@ class NewMessageActivity : AppCompatActivity() {
                             adapter.add(UserItem(user))
                         }
                     }
-
                 }
 
                     adapter.setOnItemClickListener { item, view ->

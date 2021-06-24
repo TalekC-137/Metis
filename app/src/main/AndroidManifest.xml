@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ChattingApp">
+        <activity android:name=".OtherUserProfileActivity"></activity>
         <activity android:name=".ChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -19,19 +20,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MessagesActivity" />
         </activity>
-        <activity android:name=".MessagesActivity" >
-
+        <activity android:name=".MessagesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity">
-
-        </activity>
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>
