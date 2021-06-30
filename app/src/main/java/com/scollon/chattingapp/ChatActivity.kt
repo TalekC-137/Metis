@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.scollon.chattingapp.models.ChatMessage
@@ -16,8 +18,10 @@ import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.chat_left_sender_row.view.*
 import kotlinx.android.synthetic.main.chat_right_sender_row.view.*
 
-class ChatActivity : AppCompatActivity() {
+    val TAG = "CHATACTIVITY"
 
+class ChatActivity : AppCompatActivity() {
+    var user: User? = null
     val adapter = GroupieAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,13 +30,13 @@ class ChatActivity : AppCompatActivity() {
         
         rv_chat.adapter = adapter
 
-         val user = intent.getParcelableExtra<User>("user")
+          user = intent.getParcelableExtra<User>("user") //this is the user we are texting with
         val userName = user?.username
          supportActionBar?.title = userName
 
-        if(user != null){
-            listenForMessages(user)
-        }
+
+            listenForMessages(user!!)
+
 
 /*
         val adapter = GroupieAdapter()
@@ -40,7 +44,7 @@ class ChatActivity : AppCompatActivity() {
         adapter.add(ChatRightItem("od prwejjj"))
         adapter.add(ChatLeftItem(user, "od lewejj"))
         adapter.add(ChatRightItem("od praweeej"))
-        rv_chat.adapter = adapter */
+        rv_chat.adapter = adapter  */
 
 
         btn_sendMessage.setOnClickListener(){
@@ -48,14 +52,6 @@ class ChatActivity : AppCompatActivity() {
             sendMessage()
 
         }
-        btn_usersProfile.setOnClickListener{
-
-            var i = Intent(this, OtherUserProfileActivity::class.java)
-            i.putExtra("userProf", user)
-            startActivity(i)
-
-        }
-
     }
 
     private fun listenForMessages(user: User){
@@ -145,6 +141,24 @@ class ChatActivity : AppCompatActivity() {
         latestMessageReverseRef.setValue(message)
 
            }
+
+
+
+     fun profClick( v: View){
+
+        Log.d(TAG, "the profile pic has been clicked")
+         var i = Intent(this, OtherUserProfileActivity::class.java)
+         if(user != null){
+         i.putExtra("userProf", user)
+         startActivity(i)
+         }
+        else{
+            Toast.makeText(this, "an error has accured pls try again", Toast.LENGTH_SHORT).show()
+             Log.d(TAG, "user is null")
+         }
+    }
+
+
     }
 
 //left side of the chat aka the messages that you receive

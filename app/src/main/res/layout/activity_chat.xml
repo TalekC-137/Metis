@@ -8,22 +8,11 @@
     tools:context=".ChatActivity">
 
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_usersProfile"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="P"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
     <EditText
         android:id="@+id/et_chatMessage"
         android:layout_width="0dp"
         android:layout_height="45dp"
+        android:layout_marginStart="8dp"
         android:ems="10"
         android:hint="Enter Message"
         android:inputType="textPersonName"
@@ -31,7 +20,7 @@
         android:textColorHint="#4E4E4E"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_sendMessage"
-        app:layout_constraintStart_toEndOf="@+id/btn_usersProfile" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/btn_sendMessage"

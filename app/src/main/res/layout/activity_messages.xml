@@ -126,6 +126,7 @@
             android:text="make sure the email you provided is correct"
             android:textColor="#DDD"
             android:textSize="16sp" />
+
         <TextView
             android:id="@+id/spam"
             android:layout_width="wrap_content"
@@ -136,6 +137,7 @@
             android:text="if you don't see the mail pls check your spam folder"
             android:textColor="#DDD"
             android:textSize="12sp" />
+
         <TextView
             android:id="@+id/ref"
             android:layout_width="wrap_content"
@@ -189,6 +191,15 @@
         tools:layout_marginBottom="50dp">
 
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="172dp"
+            android:text="post"
+            app:layout_constraintEnd_toEndOf="@+id/et_post"
+            app:layout_constraintTop_toBottomOf="@+id/et_post" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iV_profile_prof"
             android:layout_width="150dp"
@@ -221,7 +232,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_profile_username" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <EditText
+            android:id="@+id/et_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="write a post"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_profile_email" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

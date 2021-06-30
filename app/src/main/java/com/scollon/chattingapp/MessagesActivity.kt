@@ -16,6 +16,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.scollon.chattingapp.models.ChatMessage
+import com.scollon.chattingapp.models.PostModel
 import com.scollon.chattingapp.models.User
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieAdapter
@@ -99,6 +100,9 @@ class MessagesActivity : AppCompatActivity() {
             val i = Intent(this, NewMessageActivity::class.java)
             startActivity(i)
         }
+        btn_post.setOnClickListener {
+            postApost()
+        }
 
     }
 
@@ -136,22 +140,27 @@ class MessagesActivity : AppCompatActivity() {
            mail.text = user.email
            Log.d("verification", "Email is not verified !.")
 
-
-
-
-
        }
-
-
    }
 
 
+    fun postApost(){
+        val postsText = et_post.text.toString()
+        val fromId = FirebaseAuth.getInstance().uid
+        if(postsText.isEmpty()) return
+        if(fromId == null) return
 
+        val ref = FirebaseDatabase.getInstance().getReference("/user-posts/$fromId").push()
 
+        val userPost = PostModel(ref.key!!, fromId, postsText, System.currentTimeMillis())
 
+        ref.setValue(userPost).addOnSuccessListener {
+            Log.d("posting", "post has been added")
+        }
 
+        et_post.text.clear()
 
-
+    }
 
     val latestMessagesMap = HashMap<String, ChatMessage>()
 
@@ -269,11 +278,6 @@ class MessagesActivity : AppCompatActivity() {
         })
 
     }
-
-
-
-
-
 
 }
 
