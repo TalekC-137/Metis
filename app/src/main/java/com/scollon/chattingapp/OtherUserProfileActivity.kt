@@ -17,6 +17,7 @@ import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_other_user_profile.*
 import kotlinx.android.synthetic.main.chat_left_sender_row.view.*
 import kotlinx.android.synthetic.main.other_user_posts.view.*
+import java.text.SimpleDateFormat
 
 class OtherUserProfileActivity : AppCompatActivity() {
 
@@ -61,6 +62,7 @@ class OtherUserProfileActivity : AppCompatActivity() {
                 if(post != null){
                     adapter.add(UserPosts(user!!, post))
                     Log.d(TAG, "adding a post to the adapter")
+                    adapter.add(Spacer())
                 }
 
 
@@ -92,6 +94,20 @@ class OtherUserProfileActivity : AppCompatActivity() {
 class UserPosts(val user: User, val postModel: PostModel): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
+        var timeDifference:Long = 0
+
+        if(System.currentTimeMillis() - postModel.timeStamp >= 3600000){
+            timeDifference = (System.currentTimeMillis() - postModel.timeStamp) /  3600000
+            val timeText:String = timeDifference.toString() + " h"
+            Log.d(TAG, "hours" + timeText)
+            viewHolder.itemView.tv_post_time.text = timeText
+        }else{
+            timeDifference = (System.currentTimeMillis() - postModel.timeStamp) /  60000
+            val timeText:String = timeDifference.toString() + " m"
+
+            viewHolder.itemView.tv_post_time.text = timeText
+        }
+
         viewHolder.itemView.tv_post_username.text = user.username
 
         viewHolder.itemView.tv_post_post.text = postModel.text
@@ -105,6 +121,18 @@ class UserPosts(val user: User, val postModel: PostModel): Item<GroupieViewHolde
 
     override fun getLayout(): Int {
         return R.layout.other_user_posts
+    }
+
+}
+class Spacer(): Item<GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+
+
+
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.empty_space
     }
 
 }
