@@ -28,7 +28,7 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
         
-        rv_chat.adapter = adapter
+
 
           user = intent.getParcelableExtra<User>("user") //this is the user we are texting with
         val userName = user?.username
@@ -37,7 +37,7 @@ class ChatActivity : AppCompatActivity() {
 
             listenForMessages(user!!)
 
-
+        rv_chat.adapter = adapter
 /*
         val adapter = GroupieAdapter()
         adapter.add(ChatLeftItem(user, "od lewejj"))

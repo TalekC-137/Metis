@@ -37,7 +37,7 @@ class MessagesActivity : AppCompatActivity() {
     var mailVerif: Boolean = false
 
     val adapter = GroupieAdapter()
-
+    val postAdapter = GroupieAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +54,8 @@ class MessagesActivity : AppCompatActivity() {
                 R.id.menu_bottom_Profile -> {
                    rv_latest_messages.visibility = View.GONE
                     layout_profile.visibility = View.VISIBLE
+                   listenFetchPosts()
+
                 }
                 R.id.menu_bottom_home -> {
                     rv_latest_messages.visibility = View.VISIBLE
@@ -73,8 +75,8 @@ class MessagesActivity : AppCompatActivity() {
         //the main "home" layout with the lates messages sent recyclerView
 
         rv_latest_messages.adapter = adapter
+        rv_currentUser_posts.adapter = postAdapter
 
-                //  rv_latest_messages.adapter = adapter
         rv_latest_messages.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         adapter.setOnItemClickListener { item, view ->
@@ -227,6 +229,55 @@ class MessagesActivity : AppCompatActivity() {
         })
 
     }
+
+
+    fun listenFetchPosts(){
+
+            Log.d(TAG, "listener engaged")
+
+            var fromId = currentUser?.uid
+
+            Log.d(TAG, "listening for messages from $fromId")
+
+            val ref = FirebaseDatabase.getInstance().getReference("/user-posts/$fromId")
+
+            ref.addChildEventListener(object: ChildEventListener{
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val post = snapshot.getValue(PostModel::class.java)
+                    if(post != null){
+                        postAdapter.add(UserPosts(currentUser!!, post))
+                        Log.d(TAG, "adding a post to the adapter")
+                        postAdapter.add(Spacer())
+                    }
+
+
+
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+
+            })
+
+
+
+    }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_menu_messages, menu)
