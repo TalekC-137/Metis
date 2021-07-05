@@ -231,6 +231,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_post" />
 
+        <EditText
+            android:id="@+id/et_editUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iV_profile_prof" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_editUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Button"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/et_editUsername"
+            app:layout_constraintTop_toBottomOf="@+id/iV_profile_prof" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -35,7 +35,7 @@ class MessagesActivity : AppCompatActivity() {
     }
 
     var mailVerif: Boolean = false
-
+    var globalUsername:String? = "guest"
     val adapter = GroupieAdapter()
     val postAdapter = GroupieAdapter()
 
@@ -88,6 +88,12 @@ class MessagesActivity : AppCompatActivity() {
 
         }
 
+        tv_profile_username.setOnClickListener {
+            et_editUsername.visibility = View.VISIBLE
+            btn_editUsername.visibility = View.VISIBLE
+            tv_profile_username.visibility = View.GONE
+        }
+
         btn_tryAgain.setOnClickListener {
             val i = Intent(this, RegisterActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -105,6 +111,23 @@ class MessagesActivity : AppCompatActivity() {
         btn_post.setOnClickListener {
             postApost()
         }
+
+        btn_editUsername.setOnClickListener {
+
+            et_editUsername.visibility = View.GONE
+            btn_editUsername.visibility = View.GONE
+            tv_profile_username.visibility = View.VISIBLE
+
+            val newUsername = et_editUsername.text.toString()
+            val actualCurrentUser = auth.currentUser?.uid
+            val ref = FirebaseDatabase.getInstance().getReference("users/$actualCurrentUser/username")
+
+            if(!newUsername.isEmpty()) {
+                ref.setValue(newUsername)
+                tv_profile_username.text = newUsername
+            }
+        }
+
 
     }
 
@@ -319,7 +342,9 @@ class MessagesActivity : AppCompatActivity() {
                 tv_profile_email.text = auth.currentUser?.email
 
                 Picasso.get().load(currentUser?.profileImageUrl).into(iV_profile_prof)
-                
+
+                globalUsername = currentUser?.username
+
             }
 
             override fun onCancelled(error: DatabaseError) {
