@@ -39,6 +39,7 @@
                 android:textStyle="bold"
 
                 />
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
 

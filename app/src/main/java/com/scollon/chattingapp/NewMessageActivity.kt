@@ -77,11 +77,11 @@ class NewMessageActivity : AppCompatActivity() {
                         }
                     }
                 }
-
+                    // opening some users profile
                     adapter.setOnItemClickListener { item, view ->
                         val userItem = item as UserItem
-                        val i = Intent(view.context, ChatActivity::class.java)
-                        i.putExtra("user", userItem.user)
+                        val i = Intent(view.context, OtherUserProfileActivity::class.java)
+                        i.putExtra("userProf", userItem.user)
                         startActivity(i)
                 }
                 recyclerView_newMessage.adapter = adapter

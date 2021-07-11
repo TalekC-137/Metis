@@ -1,5 +1,6 @@
 package com.scollon.chattingapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -43,6 +44,14 @@ class OtherUserProfileActivity : AppCompatActivity() {
         listenForPosts()
         rv_user_posts.adapter = adapter
 
+        iv_otherUserProfPic.setOnClickListener{
+
+            val i = Intent(this, ChatActivity::class.java)
+            i.putExtra("user",user )
+            startActivity(i)
+
+        }
+
     }
 
 
@@ -63,6 +72,12 @@ class OtherUserProfileActivity : AppCompatActivity() {
                     adapter.add(UserPosts(user!!, post))
                     Log.d(TAG, "adding a post to the adapter")
                     adapter.add(Spacer())
+
+                    adapter.setOnItemClickListener { item, view ->
+                        val i = Intent(view.context, ChatActivity::class.java)
+                        i.putExtra("user", user)
+                        startActivity(i)
+                    }
                 }
 
 
