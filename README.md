@@ -1,5 +1,5 @@
 # Metis
-Metis is a firebase based chat app (I'll slowly turn it into a social media app)
+Metis is a firebase based chat app 
 
 ## Preview
 
