@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Metis</string>
+    <string name="test_change">Test Change</string>
+
 </resources>
